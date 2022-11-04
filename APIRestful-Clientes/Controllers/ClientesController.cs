@@ -25,7 +25,7 @@ namespace APIRestful_Clientes.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Clientes>>> GetClientes()
         {
-            return await _context.Clientes.ToListAsync();
+            return await _context.Clientes.OrderBy(x => x.LastName).ToListAsync();
         }
 
         // GET: api/Clientes/5
