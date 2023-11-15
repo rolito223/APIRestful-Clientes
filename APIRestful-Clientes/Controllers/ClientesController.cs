@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIRestful_Clientes.Data;
 using APIRestful_Clientes.Models;
+using Microsoft.VisualStudio.Web.CodeGeneration;
 
 namespace APIRestful_Clientes.Controllers
 {
@@ -71,7 +72,7 @@ namespace APIRestful_Clientes.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(clientes);
         }
 
         // POST: api/Clientes
@@ -79,7 +80,7 @@ namespace APIRestful_Clientes.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Clientes>> PostClientes(Clientes clientes)
-        {
+        {   
             _context.Clientes.Add(clientes);
             await _context.SaveChangesAsync();
 

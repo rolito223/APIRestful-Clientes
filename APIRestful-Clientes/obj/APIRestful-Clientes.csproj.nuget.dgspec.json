@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\orlan\\source\\repos\\POO\\TP03\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj": {}
+    "C:\\Users\\orlan\\source\\repos\\EDI3\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj": {}
   },
   "projects": {
-    "C:\\Users\\orlan\\source\\repos\\POO\\TP03\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj": {
+    "C:\\Users\\orlan\\source\\repos\\EDI3\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\orlan\\source\\repos\\POO\\TP03\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj",
+        "projectUniqueName": "C:\\Users\\orlan\\source\\repos\\EDI3\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj",
         "projectName": "APIRestful-Clientes",
-        "projectPath": "C:\\Users\\orlan\\source\\repos\\POO\\TP03\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj",
+        "projectPath": "C:\\Users\\orlan\\source\\repos\\EDI3\\APIRestful-Clientes\\APIRestful-Clientes\\APIRestful-Clientes.csproj",
         "packagesPath": "C:\\Users\\orlan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\orlan\\source\\repos\\POO\\TP03\\APIRestful-Clientes\\APIRestful-Clientes\\obj\\",
+        "outputPath": "C:\\Users\\orlan\\source\\repos\\EDI3\\APIRestful-Clientes\\APIRestful-Clientes\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -57,6 +57,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[3.1.5, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
             }
           },
           "imports": [
@@ -78,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

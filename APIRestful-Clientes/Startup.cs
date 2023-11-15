@@ -31,6 +31,17 @@ namespace APIRestful_Clientes
 
             services.AddDbContext<APIRestful_ClientesContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("APIRestful_ClientesContext")));
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "APIRestful_Clientes",
+                    Version = "v1",
+                    Description = "APIRestful_Clientes",
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +50,8 @@ namespace APIRestful_Clientes
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
