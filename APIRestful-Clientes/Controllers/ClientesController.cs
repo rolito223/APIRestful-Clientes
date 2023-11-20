@@ -9,12 +9,14 @@ using APIRestful_Clientes.Data;
 using APIRestful_Clientes.Models;
 using Microsoft.VisualStudio.Web.CodeGeneration;
 
+
 namespace APIRestful_Clientes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ClientesController : ControllerBase
     {
+        private Logger _logger = new Logger();
         private readonly APIRestful_ClientesContext _context;
 
         public ClientesController(APIRestful_ClientesContext context)
@@ -26,6 +28,7 @@ namespace APIRestful_Clientes.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Clientes>>> GetClientes()
         {
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}GET:api/Clientes - Se ha realizado una consulta masiva a la base de datos\n");
             return await _context.Clientes.OrderBy(x => x.LastName).ToListAsync();
         }
 
@@ -34,12 +37,13 @@ namespace APIRestful_Clientes.Controllers
         public async Task<ActionResult<Clientes>> GetClientes(int id)
         {
             var clientes = await _context.Clientes.FindAsync(id);
-
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}GET:api/Clientes/{id} - Consulta de cliente con id {id}\n");
             if (clientes == null)
-            {
+            {   
+                _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}No se ha encontrado el cliente con id {id}\n");
                 return NotFound();
             }
-
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Datos del cliente con id {id}: {clientes.get_Cliente()}\n");
             return clientes;
         }
 
@@ -49,29 +53,35 @@ namespace APIRestful_Clientes.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutClientes(int id, Clientes clientes)
         {
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}PUT:api/Clientes/{id} - Actualizacion de datos del cliente con id {id}\n");
             if (id != clientes.Id)
             {
+                _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}No se ha encontrado el cliente con id {id}\n");
                 return BadRequest();
             }
-
+            
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Datos del cliente con id {id}: {clientes.get_Cliente()}\n");
             _context.Entry(clientes).State = EntityState.Modified;
 
             try
             {
+                _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Salvando cambios del cliente con id {id}\n");
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!ClientesExists(id))
                 {
+                    _logger.Logs($"ERROR:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}No se ha encontrado el cliente con id {id}\n");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.Logs($"ERROR:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Error al actualizar los datos del cliente con id {id}\n");
                     throw;
                 }
             }
-
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Datos del cliente con id {id} actualizados correctamente\n");
             return Ok(clientes);
         }
 
@@ -81,9 +91,28 @@ namespace APIRestful_Clientes.Controllers
         [HttpPost]
         public async Task<ActionResult<Clientes>> PostClientes(Clientes clientes)
         {   
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}POST:api/Clientes - Creacion de un nuevo cliente: {clientes.get_Cliente()}\n");
             _context.Clientes.Add(clientes);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Salvando datos del nuevo cliente\n");
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (ClientesExists(clientes.Id))
+                {
+                    _logger.Logs($"ERROR:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Error al crear el cliente con id {clientes.Id}\n");
+                    return Conflict();
+                }
+                else
+                {
+                    _logger.Logs($"ERROR:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Error al crear el cliente con id {clientes.Id}\n");
+                    throw;
+                }
+            }   
 
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Cliente con id {clientes.Id} creado correctamente\n");
             return CreatedAtAction("GetClientes", new { id = clientes.Id }, clientes);
         }
 
@@ -91,15 +120,36 @@ namespace APIRestful_Clientes.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Clientes>> DeleteClientes(int id)
         {
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}DELETE:api/Clientes/{id} - Eliminacion del cliente con id {id}\n");
             var clientes = await _context.Clientes.FindAsync(id);
             if (clientes == null)
             {
+                _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}No se ha encontrado el cliente con id {id}\n");
                 return NotFound();
             }
 
-            _context.Clientes.Remove(clientes);
-            await _context.SaveChangesAsync();
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Datos del cliente con id {id}: {clientes.get_Cliente()}\n");
+            try 
+            { 
+                _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Eliminando el cliente con id {id}\n");
+                _context.Clientes.Remove(clientes);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (ClientesExists(clientes.Id))
+                {
+                    _logger.Logs($"ERROR:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Error al eliminar el cliente con id {clientes.Id}\n");
+                    return Conflict();
+                }
+                else
+                {
+                    _logger.Logs($"ERROR:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Error al eliminar el cliente con id {clientes.Id}\n");
+                    throw;
+                }
+            }
 
+            _logger.Logs($"INFO:{DateTime.Now.ToString("[dd/MM/yyyy - HH:mm:ss]")}Cliente con id {clientes.Id} eliminado correctamente\n");
             return clientes;
         }
 

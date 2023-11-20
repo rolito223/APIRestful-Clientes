@@ -21,5 +21,22 @@ namespace APIRestful_Clientes.Models
         public string Phone {get; set; }
         public string Email { get; set; }
 
+
+        public string get_Cliente()
+        {
+            return (@$"
+                    -Nombre: {Name}
+                    -Apellido: {LastName}
+                    -Direccion: {Address}
+                    -Ciudad: {City}
+                    -CP: {ZipCode}
+                    -DNI: {Dni}
+                    -Telefono: {Phone}
+                    -Email: {Email}
+                    ");
+        }
+
     }
+    
+ 
 }
